@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | NexusBookings{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">Total Services</div>
+    <div class="stat-value">{{ service_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Appointments</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;background-clip:text">{{ appointment_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Clients</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#f59e0b,#f97316);-webkit-background-clip:text;background-clip:text">{{ client_count }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Total Price</div>
+    <div class="stat-value" style="background:linear-gradient(135deg,#ef4444,#ec4899);-webkit-background-clip:text;background-clip:text">{{ service_total_price|floatformat:0 }}</div>
+  </div>
+</div>
+
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+    <h3>Recent Services</h3>
+    <a href="/services/create/" class="btn btn-primary btn-sm">+ New Service</a>
+  </div>
+  {% if recent %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Category</th><th>Duration Mins</th><th>Price</th><th>Status</th><th>Created</th></tr>
+    </thead>
+    <tbody>
+      {% for r in recent %}
+      <tr>
+        <td><a href="/services/{{ r.pk }}/edit/">{{ r.name }}</a></td>
+        <td>{{ r.category|default:"-" }}</td><td>{{ r.duration_mins|default:"-" }}</td><td>{{ r.price|floatformat:2 }}</td><td><span class="badge badge-blue">{{ r.get_status_display }}</span></td><td style="color:var(--muted)">{{ r.created_at|date:"M d, Y" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No records yet.</p>
+    <a href="/services/create/" class="btn btn-primary" style="margin-top:1rem">Create First Service</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
