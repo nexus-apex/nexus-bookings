@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} Appointment | NexusBookings{% endblock %}
+{% block page_title %}{% if editing %}Edit Appointment{% else %}New Appointment{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Client Name</label>
+        <input type="text" name="client_name" value="{{ record.client_name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Client Email</label>
+        <input type="email" name="client_email" value="{{ record.client_email|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Service Name</label>
+        <input type="text" name="service_name" value="{{ record.service_name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Provider</label>
+        <input type="text" name="provider" value="{{ record.provider|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" name="date" value="{{ record.date|date:'Y-m-d'|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Time Slot</label>
+        <input type="text" name="time_slot" value="{{ record.time_slot|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="booked" {% if record.status == 'booked' %}selected{% endif %}>Booked</option>
+          <option value="confirmed" {% if record.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+          <option value="completed" {% if record.status == 'completed' %}selected{% endif %}>Completed</option>
+          <option value="cancelled" {% if record.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+          <option value="no_show" {% if record.status == 'no_show' %}selected{% endif %}>No Show</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea name="notes">{{ record.notes|default:'' }}</textarea>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} Appointment</button>
+      <a href="/appointments/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
